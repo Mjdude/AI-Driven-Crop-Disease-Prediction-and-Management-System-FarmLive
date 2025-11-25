@@ -1,4 +1,4 @@
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
 export const api = {
   // Schemes
@@ -8,7 +8,7 @@ export const api = {
     if (params?.state) searchParams.append('state', params.state);
     if (params?.page) searchParams.append('page', params.page.toString());
     if (params?.limit) searchParams.append('limit', params.limit.toString());
-    
+
     const response = await fetch(`${API_BASE_URL}/schemes?${searchParams}`);
     return response.json();
   },
@@ -26,7 +26,7 @@ export const api = {
     if (params?.state) searchParams.append('state', params.state);
     if (params?.page) searchParams.append('page', params.page.toString());
     if (params?.limit) searchParams.append('limit', params.limit.toString());
-    
+
     const response = await fetch(`${API_BASE_URL}/trading/listings?${searchParams}`);
     return response.json();
   },
@@ -40,7 +40,7 @@ export const api = {
   getLoanProducts: async (type?: string) => {
     const searchParams = new URLSearchParams();
     if (type) searchParams.append('type', type);
-    
+
     const response = await fetch(`${API_BASE_URL}/finance/products?${searchParams}`);
     return response.json();
   },
@@ -62,8 +62,38 @@ export const api = {
     if (params?.lat) searchParams.append('lat', params.lat.toString());
     if (params?.lon) searchParams.append('lon', params.lon.toString());
     if (params?.city) searchParams.append('city', params.city);
-    
+
     const response = await fetch(`${API_BASE_URL}/weather/current?${searchParams}`);
+    return response.json();
+  },
+
+  getWeatherForecast: async (params?: { lat?: number; lon?: number; city?: string; days?: number }) => {
+    const searchParams = new URLSearchParams();
+    if (params?.lat) searchParams.append('lat', params.lat.toString());
+    if (params?.lon) searchParams.append('lon', params.lon.toString());
+    if (params?.city) searchParams.append('city', params.city);
+    if (params?.days) searchParams.append('days', params.days.toString());
+
+    const response = await fetch(`${API_BASE_URL}/weather/forecast?${searchParams}`);
+    return response.json();
+  },
+
+  getWeatherAlerts: async (params?: { state?: string; district?: string }) => {
+    const searchParams = new URLSearchParams();
+    if (params?.state) searchParams.append('state', params.state);
+    if (params?.district) searchParams.append('district', params.district);
+
+    const response = await fetch(`${API_BASE_URL}/weather/alerts?${searchParams}`);
+    return response.json();
+  },
+
+  getAgricultureAdvisory: async (params: { lat: number; lon: number; cropType?: string }) => {
+    const searchParams = new URLSearchParams();
+    searchParams.append('lat', params.lat.toString());
+    searchParams.append('lon', params.lon.toString());
+    if (params?.cropType) searchParams.append('cropType', params.cropType);
+
+    const response = await fetch(`${API_BASE_URL}/weather/advisory?${searchParams}`);
     return response.json();
   },
 
@@ -72,7 +102,7 @@ export const api = {
     const searchParams = new URLSearchParams();
     if (params?.state) searchParams.append('state', params.state);
     if (params?.commodity) searchParams.append('commodity', params.commodity);
-    
+
     const response = await fetch(`${API_BASE_URL}/market/prices?${searchParams}`);
     return response.json();
   },
@@ -84,7 +114,7 @@ export const api = {
     if (params?.priority) searchParams.append('priority', params.priority);
     if (params?.page) searchParams.append('page', params.page.toString());
     if (params?.limit) searchParams.append('limit', params.limit.toString());
-    
+
     const response = await fetch(`${API_BASE_URL}/notifications?${searchParams}`);
     return response.json();
   },

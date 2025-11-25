@@ -5,27 +5,31 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Textarea } from '@/components/ui/textarea';
 import { Progress } from '@/components/ui/progress';
-import { 
-  CreditCard, 
-  DollarSign, 
-  TrendingUp, 
-  Calendar, 
-  FileText, 
-  CheckCircle, 
-  Clock, 
+import { Checkbox } from '@/components/ui/checkbox';
+import {
+  CreditCard,
+  DollarSign,
+  TrendingUp,
+  Calendar,
+  FileText,
+  CheckCircle,
+  Clock,
   AlertTriangle,
   Calculator,
   PiggyBank,
   Banknote,
   Shield,
   Users,
-  Building
+  Building,
+  Scale
 } from 'lucide-react';
 import { toast } from 'sonner';
+
+// Import Dialogs
+import { EMICalculatorDialog } from './EMICalculatorDialog';
+import { LoanApplicationDialog } from './LoanApplicationDialog';
+import { LoanComparisonDialog } from './LoanComparisonDialog';
 
 interface LoanProduct {
   id: string;
@@ -201,40 +205,29 @@ export const FinancialAssistance = () => {
   const [applications, setApplications] = useState<LoanApplication[]>(mockApplications);
   const [insurance, setInsurance] = useState<Insurance[]>(mockInsurance);
   const [investments, setInvestments] = useState<Investment[]>(mockInvestments);
-  const [loanCalculator, setLoanCalculator] = useState({
-    amount: 100000,
-    rate: 8.5,
-    tenure: 12
-  });
-  const [emi, setEmi] = useState(0);
 
-  const calculateEMI = useCallback(() => {
-    const { amount, rate, tenure } = loanCalculator;
-    const monthlyRate = rate / 12 / 100;
-    const emiValue = (amount * monthlyRate * Math.pow(1 + monthlyRate, tenure)) / 
-                     (Math.pow(1 + monthlyRate, tenure) - 1);
-    setEmi(Math.round(emiValue));
-  }, [loanCalculator]);
-
-  useEffect(() => {
-    calculateEMI();
-  }, [calculateEMI]);
+  // Dialog States
+  const [showEMICalculator, setShowEMICalculator] = useState(false);
+  const [showLoanApplication, setShowLoanApplication] = useState(false);
+  const [selectedLoanForApp, setSelectedLoanForApp] = useState<string>('');
+  const [showComparison, setShowComparison] = useState(false);
+  const [selectedForComparison, setSelectedForComparison] = useState<string[]>([]);
 
   const handleApplyLoan = (product: LoanProduct) => {
-    const newApplication: LoanApplication = {
-      id: Date.now().toString(),
-      productId: product.id,
-      productName: product.name,
-      amount: 0,
-      purpose: '',
-      status: 'draft',
-      applicationDate: new Date().toISOString().split('T')[0],
-      expectedDisbursal: new Date(Date.now() + 15 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-      progress: 10
-    };
-    
-    setApplications(prev => [newApplication, ...prev]);
-    toast.success(`Loan application started for ${product.name}`);
+    setSelectedLoanForApp(product.name);
+    setShowLoanApplication(true);
+  };
+
+  const handleToggleComparison = (productId: string) => {
+    if (selectedForComparison.includes(productId)) {
+      setSelectedForComparison(prev => prev.filter(id => id !== productId));
+    } else {
+      if (selectedForComparison.length >= 3) {
+        toast.error('You can compare up to 3 loans at a time');
+        return;
+      }
+      setSelectedForComparison(prev => [...prev, productId]);
+    }
   };
 
   const getStatusColor = (status: string) => {
@@ -265,63 +258,16 @@ export const FinancialAssistance = () => {
           <p className="text-gray-600 mt-2">Loans, insurance, and investment solutions for farmers</p>
         </div>
         <div className="flex gap-2">
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button variant="outline" className="flex items-center gap-2">
-                <Calculator className="h-4 w-4" />
-                EMI Calculator
-              </Button>
-            </DialogTrigger>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>Loan EMI Calculator</DialogTitle>
-                <DialogDescription>Calculate your monthly installments</DialogDescription>
-              </DialogHeader>
-              <div className="space-y-4 py-4">
-                <div className="space-y-2">
-                  <Label>Loan Amount (₹)</Label>
-                  <Input
-                    type="number"
-                    value={loanCalculator.amount}
-                    onChange={(e) => setLoanCalculator(prev => ({ ...prev, amount: parseInt(e.target.value) || 0 }))}
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label>Interest Rate (% per annum)</Label>
-                  <Input
-                    type="number"
-                    step="0.1"
-                    value={loanCalculator.rate}
-                    onChange={(e) => setLoanCalculator(prev => ({ ...prev, rate: parseFloat(e.target.value) || 0 }))}
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label>Tenure (months)</Label>
-                  <Input
-                    type="number"
-                    value={loanCalculator.tenure}
-                    onChange={(e) => setLoanCalculator(prev => ({ ...prev, tenure: parseInt(e.target.value) || 0 }))}
-                  />
-                </div>
-                <div className="bg-blue-50 p-4 rounded-lg">
-                  <div className="text-center">
-                    <div className="text-2xl font-bold text-blue-600">₹{emi.toLocaleString()}</div>
-                    <div className="text-sm text-blue-600">Monthly EMI</div>
-                  </div>
-                  <div className="grid grid-cols-2 gap-4 mt-4 text-sm">
-                    <div>
-                      <div className="text-gray-600">Total Amount</div>
-                      <div className="font-semibold">₹{(emi * loanCalculator.tenure).toLocaleString()}</div>
-                    </div>
-                    <div>
-                      <div className="text-gray-600">Total Interest</div>
-                      <div className="font-semibold">₹{((emi * loanCalculator.tenure) - loanCalculator.amount).toLocaleString()}</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </DialogContent>
-          </Dialog>
+          {selectedForComparison.length > 0 && (
+            <Button variant="secondary" onClick={() => setShowComparison(true)}>
+              <Scale className="h-4 w-4 mr-2" />
+              Compare ({selectedForComparison.length})
+            </Button>
+          )}
+          <Button variant="outline" className="flex items-center gap-2" onClick={() => setShowEMICalculator(true)}>
+            <Calculator className="h-4 w-4" />
+            EMI Calculator
+          </Button>
         </div>
       </div>
 
@@ -340,12 +286,19 @@ export const FinancialAssistance = () => {
               <Card key={product.id} className="hover:shadow-lg transition-shadow">
                 <CardHeader>
                   <div className="flex justify-between items-start">
-                    <div>
-                      <CardTitle className="text-xl">{product.name}</CardTitle>
-                      <CardDescription className="flex items-center gap-2 mt-1">
-                        <Building className="h-4 w-4" />
-                        {product.provider}
-                      </CardDescription>
+                    <div className="flex items-start gap-3">
+                      <Checkbox
+                        checked={selectedForComparison.includes(product.id)}
+                        onCheckedChange={() => handleToggleComparison(product.id)}
+                        className="mt-1"
+                      />
+                      <div>
+                        <CardTitle className="text-xl">{product.name}</CardTitle>
+                        <CardDescription className="flex items-center gap-2 mt-1">
+                          <Building className="h-4 w-4" />
+                          {product.provider}
+                        </CardDescription>
+                      </div>
                     </div>
                     <div className="text-right">
                       <div className="text-2xl font-bold text-green-600">{product.interestRate}%</div>
@@ -382,7 +335,7 @@ export const FinancialAssistance = () => {
                         ))}
                       </div>
                     </div>
-                    
+
                     <div>
                       <Label className="text-sm font-medium">Required Documents:</Label>
                       <div className="flex flex-wrap gap-2 mt-1">
@@ -453,7 +406,7 @@ export const FinancialAssistance = () => {
                         <div>{new Date(application.expectedDisbursal).toLocaleDateString()}</div>
                       </div>
                     </div>
-                    
+
                     <div>
                       <div className="flex justify-between items-center mb-2">
                         <Label className="text-sm">Application Progress</Label>
@@ -508,7 +461,7 @@ export const FinancialAssistance = () => {
                       <div className="font-semibold">{policy.claimRatio}%</div>
                     </div>
                   </div>
-                  
+
                   <div className="mb-4">
                     <Label className="text-sm font-medium">Features:</Label>
                     <div className="flex flex-wrap gap-2 mt-1">
@@ -543,8 +496,8 @@ export const FinancialAssistance = () => {
                       <CardTitle>{investment.name}</CardTitle>
                       <CardDescription>{investment.description}</CardDescription>
                     </div>
-                    <Badge variant={investment.riskLevel === 'low' ? 'default' : 
-                                  investment.riskLevel === 'medium' ? 'secondary' : 'destructive'}>
+                    <Badge variant={investment.riskLevel === 'low' ? 'default' :
+                      investment.riskLevel === 'medium' ? 'secondary' : 'destructive'}>
                       {investment.riskLevel} risk
                     </Badge>
                   </div>
@@ -648,7 +601,7 @@ export const FinancialAssistance = () => {
                     <p className="text-sm text-blue-700">Build an emergency fund of ₹1.5L (3-6 months expenses)</p>
                   </div>
                 </div>
-                
+
                 <div className="flex items-start gap-3 p-3 bg-green-50 rounded-lg">
                   <Shield className="h-5 w-5 text-green-600 mt-0.5" />
                   <div>
@@ -656,7 +609,7 @@ export const FinancialAssistance = () => {
                     <p className="text-sm text-green-700">Protect your crops with PMFBY insurance scheme</p>
                   </div>
                 </div>
-                
+
                 <div className="flex items-start gap-3 p-3 bg-yellow-50 rounded-lg">
                   <TrendingUp className="h-5 w-5 text-yellow-600 mt-0.5" />
                   <div>
@@ -669,6 +622,22 @@ export const FinancialAssistance = () => {
           </Card>
         </TabsContent>
       </Tabs>
+
+      {/* Dialogs */}
+      <EMICalculatorDialog
+        open={showEMICalculator}
+        onOpenChange={setShowEMICalculator}
+      />
+      <LoanApplicationDialog
+        open={showLoanApplication}
+        onOpenChange={setShowLoanApplication}
+        productName={selectedLoanForApp}
+      />
+      <LoanComparisonDialog
+        open={showComparison}
+        onOpenChange={setShowComparison}
+        selectedLoans={loanProducts.filter(p => selectedForComparison.includes(p.id))}
+      />
     </div>
   );
 };

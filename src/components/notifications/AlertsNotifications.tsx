@@ -9,14 +9,14 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
 import { Textarea } from '@/components/ui/textarea';
-import { 
-  Bell, 
-  AlertTriangle, 
-  CheckCircle, 
-  Info, 
-  Clock, 
-  Cloud, 
-  TrendingUp, 
+import {
+  Bell,
+  AlertTriangle,
+  CheckCircle,
+  Info,
+  Clock,
+  Cloud,
+  TrendingUp,
   Droplets,
   Bug,
   Calendar,
@@ -34,6 +34,9 @@ import {
   EyeOff
 } from 'lucide-react';
 import { toast } from 'sonner';
+
+// Import Dialog
+import { CreateAlertRuleDialog } from './CreateAlertRuleDialog';
 
 interface Notification {
   id: string;
@@ -208,19 +211,22 @@ export const AlertsNotifications = () => {
       loans: true
     }
   });
-  
+
   const [filterType, setFilterType] = useState<string>('all');
   const [filterPriority, setFilterPriority] = useState<string>('all');
   const [searchTerm, setSearchTerm] = useState('');
   const [showUnreadOnly, setShowUnreadOnly] = useState(false);
 
+  // Dialog State
+  const [showCreateRule, setShowCreateRule] = useState(false);
+
   const filteredNotifications = notifications.filter(notification => {
     const matchesType = filterType === 'all' || notification.type === filterType;
     const matchesPriority = filterPriority === 'all' || notification.priority === filterPriority;
     const matchesSearch = notification.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         notification.message.toLowerCase().includes(searchTerm.toLowerCase());
+      notification.message.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesReadStatus = !showUnreadOnly || !notification.read;
-    
+
     return matchesType && matchesPriority && matchesSearch && matchesReadStatus;
   });
 
@@ -228,7 +234,7 @@ export const AlertsNotifications = () => {
   const criticalCount = notifications.filter(n => n.priority === 'critical' && !n.read).length;
 
   const handleMarkAsRead = (id: string) => {
-    setNotifications(prev => 
+    setNotifications(prev =>
       prev.map(n => n.id === id ? { ...n, read: true } : n)
     );
   };
@@ -280,7 +286,7 @@ export const AlertsNotifications = () => {
     const now = new Date();
     const diff = now.getTime() - date.getTime();
     const hours = Math.floor(diff / (1000 * 60 * 60));
-    
+
     if (hours < 1) return 'Just now';
     if (hours < 24) return `${hours}h ago`;
     return date.toLocaleDateString();
@@ -315,9 +321,9 @@ export const AlertsNotifications = () => {
                         <Smartphone className="h-4 w-4" />
                         <Label>Push Notifications</Label>
                       </div>
-                      <Switch 
+                      <Switch
                         checked={settings.pushNotifications}
-                        onCheckedChange={(checked) => 
+                        onCheckedChange={(checked) =>
                           setSettings(prev => ({ ...prev, pushNotifications: checked }))
                         }
                       />
@@ -327,9 +333,9 @@ export const AlertsNotifications = () => {
                         <MessageSquare className="h-4 w-4" />
                         <Label>SMS Alerts</Label>
                       </div>
-                      <Switch 
+                      <Switch
                         checked={settings.smsAlerts}
-                        onCheckedChange={(checked) => 
+                        onCheckedChange={(checked) =>
                           setSettings(prev => ({ ...prev, smsAlerts: checked }))
                         }
                       />
@@ -339,9 +345,9 @@ export const AlertsNotifications = () => {
                         <Mail className="h-4 w-4" />
                         <Label>Email Notifications</Label>
                       </div>
-                      <Switch 
+                      <Switch
                         checked={settings.emailNotifications}
-                        onCheckedChange={(checked) => 
+                        onCheckedChange={(checked) =>
                           setSettings(prev => ({ ...prev, emailNotifications: checked }))
                         }
                       />
@@ -355,11 +361,11 @@ export const AlertsNotifications = () => {
                     {Object.entries(settings.categories).map(([category, enabled]) => (
                       <div key={category} className="flex items-center justify-between">
                         <Label className="capitalize">{category.replace('_', ' ')}</Label>
-                        <Switch 
+                        <Switch
                           checked={enabled}
-                          onCheckedChange={(checked) => 
-                            setSettings(prev => ({ 
-                              ...prev, 
+                          onCheckedChange={(checked) =>
+                            setSettings(prev => ({
+                              ...prev,
                               categories: { ...prev.categories, [category]: checked }
                             }))
                           }
@@ -374,11 +380,11 @@ export const AlertsNotifications = () => {
                   <div className="space-y-3">
                     <div className="flex items-center justify-between">
                       <Label>Enable Quiet Hours</Label>
-                      <Switch 
+                      <Switch
                         checked={settings.quietHours.enabled}
-                        onCheckedChange={(checked) => 
-                          setSettings(prev => ({ 
-                            ...prev, 
+                        onCheckedChange={(checked) =>
+                          setSettings(prev => ({
+                            ...prev,
                             quietHours: { ...prev.quietHours, enabled: checked }
                           }))
                         }
@@ -388,12 +394,12 @@ export const AlertsNotifications = () => {
                       <div className="grid grid-cols-2 gap-4">
                         <div>
                           <Label>Start Time</Label>
-                          <Input 
-                            type="time" 
+                          <Input
+                            type="time"
                             value={settings.quietHours.start}
-                            onChange={(e) => 
-                              setSettings(prev => ({ 
-                                ...prev, 
+                            onChange={(e) =>
+                              setSettings(prev => ({
+                                ...prev,
                                 quietHours: { ...prev.quietHours, start: e.target.value }
                               }))
                             }
@@ -401,12 +407,12 @@ export const AlertsNotifications = () => {
                         </div>
                         <div>
                           <Label>End Time</Label>
-                          <Input 
-                            type="time" 
+                          <Input
+                            type="time"
                             value={settings.quietHours.end}
-                            onChange={(e) => 
-                              setSettings(prev => ({ 
-                                ...prev, 
+                            onChange={(e) =>
+                              setSettings(prev => ({
+                                ...prev,
                                 quietHours: { ...prev.quietHours, end: e.target.value }
                               }))
                             }
@@ -419,7 +425,7 @@ export const AlertsNotifications = () => {
               </div>
             </DialogContent>
           </Dialog>
-          
+
           <Button onClick={handleMarkAllAsRead} disabled={unreadCount === 0}>
             <CheckCircle className="h-4 w-4 mr-2" />
             Mark All Read
@@ -440,7 +446,7 @@ export const AlertsNotifications = () => {
             </div>
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
@@ -452,7 +458,7 @@ export const AlertsNotifications = () => {
             </div>
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
@@ -464,7 +470,7 @@ export const AlertsNotifications = () => {
             </div>
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
@@ -526,7 +532,7 @@ export const AlertsNotifications = () => {
               </SelectContent>
             </Select>
             <div className="flex items-center gap-2">
-              <Switch 
+              <Switch
                 checked={showUnreadOnly}
                 onCheckedChange={setShowUnreadOnly}
               />
@@ -537,11 +543,10 @@ export const AlertsNotifications = () => {
           {/* Notifications List */}
           <div className="space-y-3">
             {filteredNotifications.map((notification) => (
-              <Card 
-                key={notification.id} 
-                className={`transition-all hover:shadow-md ${
-                  !notification.read ? 'border-l-4 border-l-blue-500 bg-blue-50/30' : ''
-                } ${getPriorityColor(notification.priority)}`}
+              <Card
+                key={notification.id}
+                className={`transition-all hover:shadow-md ${!notification.read ? 'border-l-4 border-l-blue-500 bg-blue-50/30' : ''
+                  } ${getPriorityColor(notification.priority)}`}
               >
                 <CardContent className="pt-4">
                   <div className="flex items-start justify-between">
@@ -587,16 +592,16 @@ export const AlertsNotifications = () => {
                     </div>
                     <div className="flex gap-2 ml-4">
                       {!notification.read && (
-                        <Button 
-                          variant="ghost" 
+                        <Button
+                          variant="ghost"
                           size="sm"
                           onClick={() => handleMarkAsRead(notification.id)}
                         >
                           <Eye className="h-4 w-4" />
                         </Button>
                       )}
-                      <Button 
-                        variant="ghost" 
+                      <Button
+                        variant="ghost"
                         size="sm"
                         onClick={() => handleDeleteNotification(notification.id)}
                       >
@@ -621,7 +626,7 @@ export const AlertsNotifications = () => {
         <TabsContent value="alert-rules" className="space-y-6">
           <div className="flex justify-between items-center">
             <h2 className="text-xl font-semibold">Custom Alert Rules</h2>
-            <Button>
+            <Button onClick={() => setShowCreateRule(true)}>
               <Bell className="h-4 w-4 mr-2" />
               Create Alert Rule
             </Button>
@@ -639,10 +644,10 @@ export const AlertsNotifications = () => {
                       </CardDescription>
                     </div>
                     <div className="flex items-center gap-2">
-                      <Switch 
+                      <Switch
                         checked={rule.enabled}
-                        onCheckedChange={(checked) => 
-                          setAlertRules(prev => 
+                        onCheckedChange={(checked) =>
+                          setAlertRules(prev =>
                             prev.map(r => r.id === rule.id ? { ...r, enabled: checked } : r)
                           )
                         }
@@ -755,6 +760,11 @@ export const AlertsNotifications = () => {
           </div>
         </TabsContent>
       </Tabs>
+
+      <CreateAlertRuleDialog
+        open={showCreateRule}
+        onOpenChange={setShowCreateRule}
+      />
     </div>
   );
 };

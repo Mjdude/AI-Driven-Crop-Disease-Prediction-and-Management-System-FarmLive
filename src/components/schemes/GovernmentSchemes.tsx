@@ -4,13 +4,13 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Textarea } from '@/components/ui/textarea';
-import { Progress } from '@/components/ui/progress';
-import { CheckCircle, Clock, FileText, MapPin, DollarSign, Users, Zap, AlertCircle } from 'lucide-react';
+import { CheckCircle, Clock, FileText, DollarSign, Users, Zap, AlertCircle, ExternalLink, ClipboardList } from 'lucide-react';
 import { toast } from 'sonner';
+
+import { SchemeApplicationDialog } from './SchemeApplicationDialog';
+import { ApplicationStatusDialog } from './ApplicationStatusDialog';
 
 interface Scheme {
   id: string;
@@ -37,6 +37,14 @@ interface FarmerProfile {
   category: 'small' | 'marginal' | 'medium' | 'large';
   hasKCC: boolean;
   bankAccount: boolean;
+}
+
+interface Application {
+  id: string;
+  schemeName: string;
+  date: string;
+  status: 'Submitted' | 'Under Review' | 'Approved' | 'Rejected';
+  applicationId: string;
 }
 
 const mockSchemes: Scheme[] = [
@@ -89,7 +97,8 @@ const mockSchemes: Scheme[] = [
     category: 'Agricultural Support',
     matchScore: 90,
     status: 'eligible',
-    documents: ['Land Records', 'Aadhaar Card', 'Mobile Number']
+    documents: ['Land Records', 'Aadhaar Card', 'Mobile Number'],
+    applicationUrl: 'https://soilhealth.dac.gov.in'
   },
   {
     id: '5',
@@ -101,7 +110,8 @@ const mockSchemes: Scheme[] = [
     category: 'Sustainability',
     matchScore: 75,
     status: 'partially-eligible',
-    documents: ['Group Certificate', 'Project Proposal', 'Land Records', 'Bank Account']
+    documents: ['Group Certificate', 'Project Proposal', 'Land Records', 'Bank Account'],
+    applicationUrl: 'https://nmsa.dac.gov.in'
   }
 ];
 
@@ -121,14 +131,18 @@ export const GovernmentSchemes = () => {
     bankAccount: true
   });
   const [profileComplete, setProfileComplete] = useState(false);
-  const [applicationProgress, setApplicationProgress] = useState<{[key: string]: number}>({});
   const [filterCategory, setFilterCategory] = useState<string>('all');
+
+  // New State
+  const [showApplicationDialog, setShowApplicationDialog] = useState(false);
+  const [showStatusDialog, setShowStatusDialog] = useState(false);
+  const [applications, setApplications] = useState<Application[]>([]);
 
   useEffect(() => {
     // Check if profile is complete
     const isComplete = farmerProfile.name && farmerProfile.location && farmerProfile.farmSize > 0;
     setProfileComplete(isComplete);
-    
+
     if (isComplete) {
       // Recalculate match scores based on profile
       const updatedSchemes = schemes.map(scheme => ({
@@ -165,42 +179,31 @@ export const GovernmentSchemes = () => {
     return Math.min(score, 100);
   };
 
-  const handleSmartApply = async (scheme: Scheme) => {
+  const handleApplyClick = (scheme: Scheme) => {
     if (!profileComplete) {
       toast.error('Please complete your farmer profile first');
       return;
     }
+    setSelectedScheme(scheme);
+    setShowApplicationDialog(true);
+  };
 
-    setApplicationProgress(prev => ({ ...prev, [scheme.id]: 0 }));
-    
-    // Simulate application process
-    const steps = [
-      'Validating eligibility...',
-      'Preparing documents...',
-      'Submitting application...',
-      'Processing...',
-      'Application submitted successfully!'
-    ];
-
-    for (let i = 0; i < steps.length; i++) {
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      setApplicationProgress(prev => ({ ...prev, [scheme.id]: ((i + 1) / steps.length) * 100 }));
-      
-      if (i === steps.length - 1) {
-        toast.success(`Application for ${scheme.name} submitted successfully!`);
-        setTimeout(() => {
-          setApplicationProgress(prev => {
-            const newProgress = { ...prev };
-            delete newProgress[scheme.id];
-            return newProgress;
-          });
-        }, 2000);
-      }
+  const handleApplicationSubmit = (applicationId: string) => {
+    if (selectedScheme) {
+      const newApp: Application = {
+        id: Date.now().toString(),
+        schemeName: selectedScheme.name,
+        date: new Date().toISOString(),
+        status: 'Submitted',
+        applicationId: `APP-${Math.floor(Math.random() * 10000)}`
+      };
+      setApplications([newApp, ...applications]);
+      toast.success('Application submitted successfully!');
     }
   };
 
-  const filteredSchemes = filterCategory === 'all' 
-    ? schemes 
+  const filteredSchemes = filterCategory === 'all'
+    ? schemes
     : schemes.filter(scheme => scheme.category === filterCategory);
 
   const categories = ['all', ...Array.from(new Set(schemes.map(s => s.category)))];
@@ -212,91 +215,107 @@ export const GovernmentSchemes = () => {
           <h1 className="text-3xl font-bold text-gray-900">Government Schemes</h1>
           <p className="text-gray-600 mt-2">AI-powered scheme recommendations based on your profile</p>
         </div>
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button variant="outline" className="flex items-center gap-2">
-              <Users className="h-4 w-4" />
-              Update Profile
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="max-w-2xl">
-            <DialogHeader>
-              <DialogTitle>Farmer Profile</DialogTitle>
-              <DialogDescription>
-                Complete your profile to get personalized scheme recommendations
-              </DialogDescription>
-            </DialogHeader>
-            <div className="grid grid-cols-2 gap-4 py-4">
-              <div className="space-y-2">
-                <Label htmlFor="name">Full Name</Label>
-                <Input
-                  id="name"
-                  value={farmerProfile.name}
-                  onChange={(e) => setFarmerProfile(prev => ({ ...prev, name: e.target.value }))}
-                  placeholder="Enter your full name"
-                />
+        <div className="flex gap-2">
+          <Button
+            variant="outline"
+            className="flex items-center gap-2"
+            onClick={() => setShowStatusDialog(true)}
+          >
+            <ClipboardList className="h-4 w-4" />
+            My Applications
+            {applications.length > 0 && (
+              <Badge variant="secondary" className="ml-1 h-5 w-5 p-0 flex items-center justify-center rounded-full">
+                {applications.length}
+              </Badge>
+            )}
+          </Button>
+
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button className="flex items-center gap-2">
+                <Users className="h-4 w-4" />
+                Update Profile
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="max-w-2xl">
+              <DialogHeader>
+                <DialogTitle>Farmer Profile</DialogTitle>
+                <DialogDescription>
+                  Complete your profile to get personalized scheme recommendations
+                </DialogDescription>
+              </DialogHeader>
+              <div className="grid grid-cols-2 gap-4 py-4">
+                <div className="space-y-2">
+                  <Label htmlFor="name">Full Name</Label>
+                  <Input
+                    id="name"
+                    value={farmerProfile.name}
+                    onChange={(e) => setFarmerProfile(prev => ({ ...prev, name: e.target.value }))}
+                    placeholder="Enter your full name"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="location">Location</Label>
+                  <Input
+                    id="location"
+                    value={farmerProfile.location}
+                    onChange={(e) => setFarmerProfile(prev => ({ ...prev, location: e.target.value }))}
+                    placeholder="Village, District, State"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="farmSize">Farm Size (acres)</Label>
+                  <Input
+                    id="farmSize"
+                    type="number"
+                    value={farmerProfile.farmSize || ''}
+                    onChange={(e) => setFarmerProfile(prev => ({ ...prev, farmSize: parseFloat(e.target.value) || 0 }))}
+                    placeholder="Enter farm size"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="experience">Farming Experience (years)</Label>
+                  <Input
+                    id="experience"
+                    type="number"
+                    value={farmerProfile.farmingExperience || ''}
+                    onChange={(e) => setFarmerProfile(prev => ({ ...prev, farmingExperience: parseInt(e.target.value) || 0 }))}
+                    placeholder="Years of experience"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="income">Annual Income (₹)</Label>
+                  <Input
+                    id="income"
+                    type="number"
+                    value={farmerProfile.annualIncome || ''}
+                    onChange={(e) => setFarmerProfile(prev => ({ ...prev, annualIncome: parseFloat(e.target.value) || 0 }))}
+                    placeholder="Annual income"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="category">Farmer Category</Label>
+                  <Select
+                    value={farmerProfile.category}
+                    onValueChange={(value: 'small' | 'marginal' | 'medium' | 'large') =>
+                      setFarmerProfile(prev => ({ ...prev, category: value }))
+                    }
+                  >
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="marginal">Marginal Farmer (&lt;1 acre)</SelectItem>
+                      <SelectItem value="small">Small Farmer (1-2 acres)</SelectItem>
+                      <SelectItem value="medium">Medium Farmer (2-10 acres)</SelectItem>
+                      <SelectItem value="large">Large Farmer (&gt;10 acres)</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="location">Location</Label>
-                <Input
-                  id="location"
-                  value={farmerProfile.location}
-                  onChange={(e) => setFarmerProfile(prev => ({ ...prev, location: e.target.value }))}
-                  placeholder="Village, District, State"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="farmSize">Farm Size (acres)</Label>
-                <Input
-                  id="farmSize"
-                  type="number"
-                  value={farmerProfile.farmSize || ''}
-                  onChange={(e) => setFarmerProfile(prev => ({ ...prev, farmSize: parseFloat(e.target.value) || 0 }))}
-                  placeholder="Enter farm size"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="experience">Farming Experience (years)</Label>
-                <Input
-                  id="experience"
-                  type="number"
-                  value={farmerProfile.farmingExperience || ''}
-                  onChange={(e) => setFarmerProfile(prev => ({ ...prev, farmingExperience: parseInt(e.target.value) || 0 }))}
-                  placeholder="Years of experience"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="income">Annual Income (₹)</Label>
-                <Input
-                  id="income"
-                  type="number"
-                  value={farmerProfile.annualIncome || ''}
-                  onChange={(e) => setFarmerProfile(prev => ({ ...prev, annualIncome: parseFloat(e.target.value) || 0 }))}
-                  placeholder="Annual income"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="category">Farmer Category</Label>
-                <Select 
-                  value={farmerProfile.category} 
-                  onValueChange={(value: 'small' | 'marginal' | 'medium' | 'large') => 
-                    setFarmerProfile(prev => ({ ...prev, category: value }))
-                  }
-                >
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="marginal">Marginal Farmer (&lt;1 acre)</SelectItem>
-                    <SelectItem value="small">Small Farmer (1-2 acres)</SelectItem>
-                    <SelectItem value="medium">Medium Farmer (2-10 acres)</SelectItem>
-                    <SelectItem value="large">Large Farmer (&gt;10 acres)</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-          </DialogContent>
-        </Dialog>
+            </DialogContent>
+          </Dialog>
+        </div>
       </div>
 
       {!profileComplete && (
@@ -335,9 +354,9 @@ export const GovernmentSchemes = () => {
                 <div className="flex-1">
                   <div className="flex items-center gap-3 mb-2">
                     <CardTitle className="text-xl">{scheme.name}</CardTitle>
-                    <Badge 
-                      variant={scheme.status === 'eligible' ? 'default' : 
-                              scheme.status === 'partially-eligible' ? 'secondary' : 'destructive'}
+                    <Badge
+                      variant={scheme.status === 'eligible' ? 'default' :
+                        scheme.status === 'partially-eligible' ? 'secondary' : 'destructive'}
                     >
                       {scheme.matchScore}% Match
                     </Badge>
@@ -345,6 +364,18 @@ export const GovernmentSchemes = () => {
                   <CardDescription className="text-base">{scheme.description}</CardDescription>
                 </div>
                 <div className="flex gap-2">
+                  {scheme.applicationUrl && (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => window.open(scheme.applicationUrl, '_blank')}
+                      className="hidden md:flex"
+                    >
+                      <ExternalLink className="h-4 w-4 mr-2" />
+                      Official Site
+                    </Button>
+                  )}
+
                   <Dialog>
                     <DialogTrigger asChild>
                       <Button variant="outline" size="sm" onClick={() => setSelectedScheme(scheme)}>
@@ -385,25 +416,31 @@ export const GovernmentSchemes = () => {
                           </div>
                           <Badge>{scheme.category}</Badge>
                         </div>
+
+                        {scheme.applicationUrl && (
+                          <div className="pt-4 border-t">
+                            <Button
+                              variant="outline"
+                              className="w-full"
+                              onClick={() => window.open(scheme.applicationUrl, '_blank')}
+                            >
+                              <ExternalLink className="h-4 w-4 mr-2" />
+                              Visit Official Website
+                            </Button>
+                          </div>
+                        )}
                       </div>
                     </DialogContent>
                   </Dialog>
-                  
-                  {applicationProgress[scheme.id] !== undefined ? (
-                    <div className="flex items-center gap-2 min-w-32">
-                      <Progress value={applicationProgress[scheme.id]} className="flex-1" />
-                      <span className="text-sm">{Math.round(applicationProgress[scheme.id])}%</span>
-                    </div>
-                  ) : (
-                    <Button 
-                      onClick={() => handleSmartApply(scheme)}
-                      disabled={!profileComplete}
-                      className="flex items-center gap-2"
-                    >
-                      <Zap className="h-4 w-4" />
-                      Smart Apply
-                    </Button>
-                  )}
+
+                  <Button
+                    onClick={() => handleApplyClick(scheme)}
+                    disabled={!profileComplete}
+                    className="flex items-center gap-2"
+                  >
+                    <Zap className="h-4 w-4" />
+                    Smart Apply
+                  </Button>
                 </div>
               </div>
             </CardHeader>
@@ -426,6 +463,19 @@ export const GovernmentSchemes = () => {
           </Card>
         ))}
       </div>
+
+      <SchemeApplicationDialog
+        open={showApplicationDialog}
+        onOpenChange={setShowApplicationDialog}
+        scheme={selectedScheme}
+        onSubmit={handleApplicationSubmit}
+      />
+
+      <ApplicationStatusDialog
+        open={showStatusDialog}
+        onOpenChange={setShowStatusDialog}
+        applications={applications}
+      />
     </div>
   );
 };

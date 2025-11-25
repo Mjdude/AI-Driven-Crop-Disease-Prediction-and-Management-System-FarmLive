@@ -1,44 +1,54 @@
 
-import React from 'react';
+import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { AlertTriangle, CheckCircle, Clock } from 'lucide-react';
+import { toast } from 'sonner';
+import { CropHealthAnalysisDialog } from './CropHealthAnalysisDialog';
 
 export const CropHealth: React.FC = () => {
+  const { t } = useTranslation();
+  const [showAnalysisDialog, setShowAnalysisDialog] = useState(false);
+
+  const handleViewAnalysis = () => {
+    setShowAnalysisDialog(true);
+  };
+
   const healthData = [
     {
-      crop: 'Wheat (Field A)',
+      crop: `${t('commodities.wheat')} (Field A)`,
       status: 'excellent',
       health: 95,
-      issue: 'No issues detected',
+      issue: t('crop_health.issues.no_issues'),
       icon: CheckCircle,
       color: 'text-green-500',
       bgColor: 'bg-green-50',
       borderColor: 'border-green-200'
     },
     {
-      crop: 'Corn (Field B)',
+      crop: `${t('commodities.corn')} (Field B)`,
       status: 'good',
       health: 82,
-      issue: 'Slight nutrient deficiency',
+      issue: t('crop_health.issues.nutrient_deficiency'),
       icon: Clock,
       color: 'text-yellow-500',
       bgColor: 'bg-yellow-50',
       borderColor: 'border-yellow-200'
     },
     {
-      crop: 'Tomatoes (Greenhouse)',
+      crop: `${t('commodities.tomatoes')} (Greenhouse)`,
       status: 'attention',
       health: 68,
-      issue: 'Pest activity detected',
+      issue: t('crop_health.issues.pest_activity'),
       icon: AlertTriangle,
       color: 'text-red-500',
       bgColor: 'bg-red-50',
       borderColor: 'border-red-200'
     },
     {
-      crop: 'Onions (Field C)',
+      crop: `${t('commodities.onions')} (Field C)`,
       status: 'excellent',
       health: 91,
-      issue: 'Optimal growth conditions',
+      issue: t('crop_health.issues.optimal_growth'),
       icon: CheckCircle,
       color: 'text-green-500',
       bgColor: 'bg-green-50',
@@ -49,16 +59,16 @@ export const CropHealth: React.FC = () => {
   return (
     <div className="metric-card">
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-lg font-semibold text-gray-900">Crop Health Monitor</h3>
-        <span className="text-xs text-gray-500">Live Status</span>
+        <h3 className="text-lg font-semibold text-gray-900">{t('dashboard.crop_health_monitor')}</h3>
+        <span className="text-xs text-gray-500">{t('dashboard.live_status')}</span>
       </div>
 
       <div className="space-y-3">
         {healthData.map((crop, index) => {
           const Icon = crop.icon;
           return (
-            <div 
-              key={index} 
+            <div
+              key={index}
               className={`p-3 rounded-lg border ${crop.bgColor} ${crop.borderColor}`}
             >
               <div className="flex items-center justify-between">
@@ -71,18 +81,17 @@ export const CropHealth: React.FC = () => {
                 </div>
                 <div className="text-right">
                   <div className="font-bold text-gray-900">{crop.health}%</div>
-                  <div className="text-xs text-gray-500">Health</div>
+                  <div className="text-xs text-gray-500">{t('common.health')}</div>
                 </div>
               </div>
-              
+
               {/* Health Bar */}
               <div className="mt-2">
                 <div className="w-full bg-gray-200 rounded-full h-2">
-                  <div 
-                    className={`h-2 rounded-full ${
-                      crop.health >= 90 ? 'bg-green-500' : 
+                  <div
+                    className={`h-2 rounded-full ${crop.health >= 90 ? 'bg-green-500' :
                       crop.health >= 75 ? 'bg-yellow-500' : 'bg-red-500'
-                    }`}
+                      }`}
                     style={{ width: `${crop.health}%` }}
                   ></div>
                 </div>
@@ -92,9 +101,17 @@ export const CropHealth: React.FC = () => {
         })}
       </div>
 
-      <button className="w-full mt-4 bg-farm-green-500 hover:bg-farm-green-600 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200">
-        View Detailed Analysis
+      <button
+        onClick={handleViewAnalysis}
+        className="w-full mt-4 bg-farm-green-500 hover:bg-farm-green-600 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200"
+      >
+        {t('dashboard.view_analysis')}
       </button>
+
+      <CropHealthAnalysisDialog
+        open={showAnalysisDialog}
+        onOpenChange={setShowAnalysisDialog}
+      />
     </div>
   );
 };

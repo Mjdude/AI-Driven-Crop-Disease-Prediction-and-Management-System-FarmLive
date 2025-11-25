@@ -13,6 +13,8 @@ import { GovernmentSchemes } from '@/components/schemes/GovernmentSchemes';
 import { CropTrading } from '@/components/trading/CropTrading';
 import { FinancialAssistance } from '@/components/finance/FinancialAssistance';
 import { AlertsNotifications } from '@/components/notifications/AlertsNotifications';
+import { Analytics } from '@/components/analytics/Analytics';
+import { SettingsPage } from '@/components/settings/SettingsPage';
 
 const Index = () => {
   const [activeSection, setActiveSection] = useState('dashboard');
@@ -42,6 +44,10 @@ const Index = () => {
         return <FinancialAssistance />;
       case 'alerts-notifications':
         return <AlertsNotifications />;
+      case 'analytics':
+        return <Analytics />;
+      case 'settings':
+        return <SettingsPage />;
       default:
         return <Dashboard />;
     }
@@ -49,22 +55,21 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Header 
-        sidebarOpen={sidebarOpen} 
+      <Header
+        sidebarOpen={sidebarOpen}
         setSidebarOpen={setSidebarOpen}
         activeSection={activeSection}
       />
-      
+
       <div className="flex h-screen pt-16">
-        <Sidebar 
+        <Sidebar
           isOpen={sidebarOpen}
           activeSection={activeSection}
           setActiveSection={setActiveSection}
         />
-        
-        <main className={`flex-1 overflow-auto transition-all duration-300 ${
-          sidebarOpen ? 'ml-64' : 'ml-16'
-        }`}>
+
+        <main className={`flex-1 overflow-auto transition-all duration-300 ${sidebarOpen ? 'ml-64' : 'ml-16'
+          }`}>
           <div className="p-6">
             {renderContent()}
           </div>

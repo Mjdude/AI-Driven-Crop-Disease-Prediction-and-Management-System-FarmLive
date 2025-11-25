@@ -1,0 +1,534 @@
+{
+    "app": {
+        "title": "FarmSmart Horizon",
+        "tagline": "Empowering Farmers, Securing Future"
+    },
+    "sidebar": {
+        "dashboard": "Dashboard",
+        "crop_monitoring": "Crop Monitoring",
+        "market_intelligence": "Market Intelligence",
+        "weather_advisory": "Weather Advisory",
+        "gov_schemes": "Gov Schemes",
+        "crop_trading": "Crop Trading",
+        "finance": "Finance",
+        "alerts": "Alerts",
+        "community": "Community Hub",
+        "ai_assistant": "AI Assistant",
+        "she_farms": "SheFarms",
+        "analytics": "Analytics",
+        "settings": "Settings",
+        "tools": "Tools"
+    },
+    "header": {
+        "search_placeholder": "Search...",
+        "notifications": "Notifications",
+        "profile": "Profile",
+        "language": "Language"
+    },
+    "common": {
+        "save": "Save",
+        "cancel": "Cancel",
+        "submit": "Submit",
+        "loading": "Loading...",
+        "success": "Success",
+        "error": "Error",
+        "acres": "Acres",
+        "types": "Types",
+        "today": "Today",
+        "tomorrow": "Tomorrow",
+        "health": "Health"
+    },
+    "dashboard": {
+        "welcome_title": "Good Morning, Rajesh! 🌱",
+        "welcome_subtitle": "Your farm is thriving. Here's what's happening today.",
+        "expected_revenue": "Expected Revenue",
+        "farm_overview": "Farm Overview",
+        "farm_name": "Greenfield Farm",
+        "total_area": "Total Area",
+        "active_crops": "Active Crops",
+        "water_usage": "Water Usage",
+        "yield_prediction": "Yield Prediction",
+        "crop_performance": "Crop Performance",
+        "weather_advisory": "Weather Advisory",
+        "quick_actions": "Quick Actions",
+        "todays_recommendation": "Today's Recommendation",
+        "recommendation_text": "Perfect weather for pesticide application in Wheat field section A2.",
+        "crop_health_monitor": "Crop Health Monitor",
+        "live_status": "Live Status",
+        "view_analysis": "View Detailed Analysis",
+        "market_prices": "Market Prices",
+        "last_updated": "Last updated: 2 hours ago",
+        "market_insight": "Market Insight",
+        "market_insight_text": "Vegetable prices are trending upward due to favorable weather conditions. Consider increasing tomato and onion production.",
+        "recent_activities": "Recent Activities",
+        "view_activity_log": "View Activity Log",
+        "notifications": "Notifications",
+        "view_all_notifications": "View All Notifications"
+    },
+    "weather": {
+        "humidity": "Humidity",
+        "wind": "Wind",
+        "forecast_4_day": "4-Day Forecast",
+        "alert_rain_title": "Rain Expected Tomorrow",
+        "alert_rain_desc": "Perfect for irrigation planning. Consider postponing pesticide application."
+    },
+    "actions": {
+        "add_crop": "Add Crop Record",
+        "add_crop_desc": "Log new planting activity",
+        "health_check": "Crop Health Check",
+        "health_check_desc": "Take photos for AI analysis",
+        "schedule_irrigation": "Schedule Irrigation",
+        "schedule_irrigation_desc": "Plan water management",
+        "farm_settings": "Farm Settings",
+        "farm_settings_desc": "Update farm configuration"
+    },
+    "market": {
+        "per_quintal": "per quintal",
+        "per_kg": "per kg"
+    },
+    "crop_monitoring": {
+        "title": "Crop Monitoring System",
+        "subtitle": "AI-powered crop health analysis and field management",
+        "disease_detection": {
+            "title": "Disease Detection",
+            "description": "Upload crop images for AI-powered disease detection and treatment recommendations",
+            "upload_button": "Upload Crop Photo",
+            "results_title": "Disease Detection Results",
+            "analyze_button": "Analyze Crop Health",
+            "analyzing": "Analyzing crop health...",
+            "analysis_complete": "Analysis Complete",
+            "detected_condition": "Detected Condition",
+            "confidence_level": "Confidence Level",
+            "recommended_treatment": "Recommended Treatment",
+            "additional_steps": "Additional Steps",
+            "save_history": "Save to History",
+            "close": "Close"
+        },
+        "field_mapping": {
+            "title": "Field Mapping",
+            "description": "Interactive maps with crop status indicators and disease outbreak zones",
+            "view_maps": "View Disease Maps",
+            "dialog_title": "Farm Field Map",
+            "dialog_desc": "Interactive map of your farm fields and their current status",
+            "legend": {
+                "healthy": "Healthy",
+                "needs_attention": "Needs Attention",
+                "critical": "Critical"
+            },
+            "details": {
+                "crop_type": "Crop Type",
+                "area_size": "Area Size",
+                "soil_moisture": "Soil Moisture",
+                "last_irrigated": "Last Irrigated",
+                "view_report": "View Detailed Report",
+                "select_prompt": "Select a field on the map to view details"
+            }
+        },
+        "health_analytics": {
+            "title": "Health Analytics",
+            "description": "Monitor crop health trends, treatment effectiveness, and yield predictions",
+            "growth_button": "Growth",
+            "yield_button": "Yield",
+            "recent_scans": "Recent Health Scans",
+            "confidence": "Confidence"
+        },
+        "growth_stage": {
+            "title": "Crop Growth Tracking",
+            "description": "Monitor growth stages and upcoming milestones",
+            "select_crop": "Select Crop",
+            "estimated_harvest": "Estimated Harvest",
+            "progress": "Progress",
+            "current_stage": "Current Stage",
+            "day": "Day",
+            "recommended_action": "Recommended Action"
+        },
+        "yield_prediction": {
+            "title": "Yield Prediction Calculator",
+            "description": "AI-powered yield estimation based on current conditions",
+            "crop_type": "Crop Type",
+            "variety": "Variety",
+            "sowing_date": "Sowing Date",
+            "field_area": "Field Area (Acres)",
+            "soil_moisture": "Current Soil Moisture (%)",
+            "predict_button": "Predict Yield",
+            "calculating": "Calculating...",
+            "calculate_another": "Calculate Another",
+            "predicted_yield": "Predicted Yield",
+            "contributing_factors": "Contributing Factors",
+            "disclaimer": "Prediction confidence is {{confidence}}. Actual yield may vary based on future weather events."
+        }
+    },
+    "commodities": {
+        "wheat": "Wheat",
+        "rice": "Rice",
+        "corn": "Corn",
+        "tomatoes": "Tomatoes",
+        "onions": "Onions",
+        "potato": "Potato"
+    },
+    "crop_health": {
+        "issues": {
+            "no_issues": "No issues detected",
+            "nutrient_deficiency": "Slight nutrient deficiency",
+            "pest_activity": "Pest activity detected",
+            "optimal_growth": "Optimal growth conditions"
+        }
+    },
+    "notifications": {
+        "heavy_rain": "Heavy Rain Alert",
+        "irrigation_reminder": "Irrigation Reminder",
+        "crop_health_check": "Crop Health Check",
+        "rain_expected": "Expected in next 24 hours",
+        "north_field_irrigation": "North Field - 2 hours",
+        "tomato_inspection": "Tomato crop due for inspection"
+    },
+    "activities": {
+        "wheat_harvest": "Wheat harvest completed",
+        "irrigation_activated": "Irrigation system activated",
+        "pest_photos_uploaded": "Pest monitoring photos uploaded",
+        "fertilizer_scheduled": "Fertilizer application scheduled",
+        "sensor_calibrated": "Soil moisture sensor calibrated"
+    },
+    "she_farms": {
+        "schemes_tab": "Women Empowerment Schemes",
+        "health_tab": "Health & Wellness",
+        "title": "SheFarms - Women Empowerment Schemes",
+        "subtitle": "Dedicated schemes and support for women farmers across India",
+        "training_programs": "Training Programs",
+        "available_schemes": "Available Schemes for Women Farmers",
+        "ai_recommendation": "AI-powered scheme recommendations based on your profile",
+        "update_profile": "Update Profile",
+        "profile_dialog": {
+            "title": "Women Farmer Profile",
+            "description": "Complete your profile to get personalized scheme recommendations",
+            "labels": {
+                "name": "Full Name",
+                "location": "Location",
+                "age": "Age",
+                "farm_size": "Farm Size (acres)",
+                "experience": "Farming Experience (years)",
+                "income": "Annual Income (₹)",
+                "category": "Farmer Category",
+                "education": "Education"
+            },
+            "placeholders": {
+                "name": "Enter your full name",
+                "location": "Village, District, State",
+                "age": "Enter your age",
+                "farm_size": "Enter farm size",
+                "experience": "Years of experience",
+                "income": "Annual income",
+                "education": "Highest education level"
+            },
+            "categories": {
+                "marginal": "Marginal Farmer (<1 acre)",
+                "small": "Small Farmer (1-2 acres)",
+                "medium": "Medium Farmer (2-10 acres)",
+                "large": "Large Farmer (>10 acres)"
+            }
+        },
+        "alert": {
+            "complete_profile": "Complete your profile for better recommendations",
+            "update_profile": "Update your farmer profile to get AI-powered scheme suggestions"
+        },
+        "filter_label": "Filter by Category:",
+        "all_categories": "All Categories",
+        "match_score": "Match Score",
+        "details": "Details",
+        "official_website": "Official Website",
+        "easy_apply": "Easy Apply",
+        "scheme_details": {
+            "eligibility": "Eligibility Criteria:",
+            "benefits": "Benefits:",
+            "documents": "Required Documents:",
+            "deadline": "Deadline:"
+        },
+        "schemes": {
+            "1": {
+                "name": "Mahila Kisan Sashaktikaran Pariyojana (MKSP)",
+                "description": "Empowerment scheme for women farmers through sustainable agriculture practices and skill development",
+                "benefits": "Training, tools, and financial support up to ₹50,000 for sustainable farming"
+            },
+            "2": {
+                "name": "Women Farmer Entitlement (PM-KISAN)",
+                "description": "Direct income support for women farmers with land holdings",
+                "benefits": "₹6000 per year in 3 installments of ₹2000 each"
+            },
+            "3": {
+                "name": "National Rural Livelihood Mission - Women SHG",
+                "description": "Support for women Self Help Groups in agricultural activities",
+                "benefits": "Revolving fund up to ₹1.5 lakh and credit linkage support"
+            },
+            "4": {
+                "name": "Women Agri-Entrepreneurship Development",
+                "description": "Financial and technical support for women starting agri-businesses",
+                "benefits": "Subsidy up to 35% on project cost, maximum ₹10 lakh"
+            },
+            "5": {
+                "name": "Organic Farming Promotion for Women",
+                "description": "Special scheme promoting organic farming practices among women farmers",
+                "benefits": "Certification support, training, and ₹30,000 per acre for 3 years"
+            },
+            "6": {
+                "name": "Women Dairy Farming Support Scheme",
+                "description": "Support for women in dairy farming and milk production",
+                "benefits": "Subsidy up to 50% on cattle purchase, maximum ₹2 lakh"
+            }
+        },
+        "health": {
+            "title": "Women's Health & Wellness",
+            "subtitle": "Track your health, get personalized suggestions, and learn about preventive care",
+            "book_appointment": "Book Appointment",
+            "tabs": {
+                "assessment": "Health Assessment",
+                "videos": "Health Awareness Videos"
+            },
+            "assessment": {
+                "title": "Your Health Information",
+                "description": "Enter your health data to receive personalized health assessment and suggestions",
+                "labels": {
+                    "age": "Age (years) *",
+                    "weight": "Weight (kg) *",
+                    "height": "Height (cm) *",
+                    "activity_level": "Activity Level",
+                    "bp": "Blood Pressure (optional)",
+                    "sleep": "Sleep Hours per Night",
+                    "water": "Water Intake (liters/day)",
+                    "last_checkup": "Last Health Checkup"
+                },
+                "placeholders": {
+                    "age": "Enter your age",
+                    "weight": "Enter your weight",
+                    "height": "Enter your height",
+                    "bp": "e.g., 120/80",
+                    "sleep": "Average hours of sleep",
+                    "water": "Daily water intake"
+                },
+                "activity_levels": {
+                    "sedentary": "Sedentary (Little to no exercise)",
+                    "light": "Light (Exercise 1-3 days/week)",
+                    "moderate": "Moderate (Exercise 3-5 days/week)",
+                    "active": "Active (Exercise 6-7 days/week)"
+                },
+                "button": "Get Health Assessment",
+                "results": {
+                    "title": "Your Health Assessment",
+                    "bmi": "BMI",
+                    "score": "Health Score",
+                    "risk_level": "Risk Level"
+                },
+                "suggestions": {
+                    "title": "Personalized Health Suggestions",
+                    "description": "Based on your health data, here are recommendations to improve your well-being"
+                },
+                "common_issues": {
+                    "title": "Common Health Issues for Women Farmers",
+                    "musculoskeletal": {
+                        "title": "Musculoskeletal Problems",
+                        "desc": "Back pain, joint pain from repetitive farm work"
+                    },
+                    "skin": {
+                        "title": "Skin Conditions",
+                        "desc": "Sun damage, allergies from pesticides"
+                    },
+                    "respiratory": {
+                        "title": "Respiratory Issues",
+                        "desc": "Dust exposure, chemical inhalation"
+                    },
+                    "reproductive": {
+                        "title": "Reproductive Health",
+                        "desc": "Hormonal changes, pregnancy-related concerns"
+                    }
+                },
+                "bmi_categories": {
+                    "underweight": "Underweight",
+                    "normal": "Normal weight",
+                    "overweight": "Overweight",
+                    "obese": "Obese"
+                },
+                "risk_levels": {
+                    "low": "LOW",
+                    "moderate": "MODERATE",
+                    "high": "HIGH"
+                },
+                "dynamic_suggestions": {
+                    "underweight": {
+                        "1": "Your BMI indicates underweight. Consider increasing caloric intake with nutritious foods.",
+                        "2": "Consult a nutritionist for a personalized meal plan to gain healthy weight."
+                    },
+                    "overweight": {
+                        "1": "Your BMI indicates overweight. Focus on balanced diet and regular physical activity.",
+                        "2": "Aim for 30 minutes of moderate exercise daily, such as brisk walking."
+                    },
+                    "obese": {
+                        "1": "Your BMI indicates obesity. Consult a healthcare provider for a weight management plan.",
+                        "2": "Consider joining a support group or working with a dietitian."
+                    },
+                    "sedentary": {
+                        "1": "Increase physical activity gradually. Start with 15-20 minutes of walking daily.",
+                        "2": "Take regular breaks during farm work to stretch and move around."
+                    },
+                    "sleep_low": {
+                        "1": "You need more sleep. Aim for 7-8 hours of quality sleep each night.",
+                        "2": "Establish a regular sleep schedule and create a relaxing bedtime routine."
+                    },
+                    "sleep_high": {
+                        "1": "Excessive sleep may indicate underlying health issues. Consider consulting a doctor."
+                    },
+                    "water_low": {
+                        "1": "Increase water intake to at least 2-3 liters daily, especially during farm work.",
+                        "2": "Carry a water bottle and set reminders to drink water regularly."
+                    },
+                    "age_40": {
+                        "1": "Schedule regular health screenings including mammograms and bone density tests.",
+                        "2": "Ensure adequate calcium and vitamin D intake for bone health."
+                    },
+                    "general": {
+                        "1": "Eat a balanced diet rich in fruits, vegetables, whole grains, and lean proteins.",
+                        "2": "Practice stress management techniques like meditation or yoga.",
+                        "3": "Schedule regular health check-ups at least once a year.",
+                        "4": "Protect yourself from sun exposure with sunscreen and protective clothing."
+                    }
+                }
+            },
+            "videos": {
+                "title": "Health Awareness Videos",
+                "description": "Educational videos on health topics important for women farmers",
+                "watch": "Watch Video",
+                "watch_youtube": "Watch on YouTube",
+                "recommended": {
+                    "title": "Recommended Videos",
+                    "description": "Watch these selected videos for more information"
+                },
+                "tips": {
+                    "title": "Quick Health Tips",
+                    "balanced_meals": {
+                        "title": "Eat Balanced Meals",
+                        "desc": "Include proteins, vegetables, and whole grains in every meal"
+                    },
+                    "hydration": {
+                        "title": "Stay Hydrated",
+                        "desc": "Drink at least 8-10 glasses of water daily"
+                    },
+                    "exercise": {
+                        "title": "Regular Exercise",
+                        "desc": "30 minutes of physical activity daily"
+                    },
+                    "sleep": {
+                        "title": "Quality Sleep",
+                        "desc": "Get 7-8 hours of sleep every night"
+                    }
+                },
+                "list": {
+                    "1": {
+                        "title": "Nutrition for Women Farmers",
+                        "desc": "Essential nutrients and balanced diet tips for women working in agriculture"
+                    },
+                    "2": {
+                        "title": "Preventing Back Pain in Farm Work",
+                        "desc": "Proper posture and exercises to prevent back pain during farming activities"
+                    },
+                    "3": {
+                        "title": "Managing Stress and Mental Health",
+                        "desc": "Techniques to manage stress and maintain mental well-being"
+                    },
+                    "4": {
+                        "title": "Sun Protection and Skin Care",
+                        "desc": "Protecting your skin from sun damage while working outdoors"
+                    },
+                    "5": {
+                        "title": "Reproductive Health Awareness",
+                        "desc": "Important information about reproductive health for women farmers"
+                    },
+                    "6": {
+                        "title": "Hydration and Heat Management",
+                        "desc": "Staying hydrated and managing heat exposure during farm work"
+                    }
+                }
+            },
+            "messages": {
+                "fill_required": "Please fill in age, weight, and height to get assessment",
+                "assessment_complete": "Health assessment completed!",
+                "fetch_error": "Failed to fetch video suggestions"
+            }
+        }
+    },
+    "ai_assistant": {
+        "title": "AI Farm Assistant",
+        "subtitle": "Intelligent support for all your farming decisions",
+        "settings": "Settings",
+        "insights": "AI Insights",
+        "summary": {
+            "active": "Active Recommendations",
+            "high_priority": "High Priority",
+            "applied": "Applied Actions",
+            "saved": "Saved Analyses"
+        },
+        "tabs": {
+            "chat": "AI Chat",
+            "recommendations": "Smart Recommendations",
+            "image": "Image Analysis",
+            "knowledge": "Knowledge Base"
+        },
+        "chat": {
+            "title": "AI Farm Assistant Chat",
+            "description": "Ask questions about farming, get instant advice, and receive personalized recommendations",
+            "export": "Export Chat",
+            "placeholder": "Ask me anything about farming...",
+            "upload_image": "Upload Image",
+            "share_report": "Share Report",
+            "copy": "Copied to clipboard",
+            "cleared": "Chat history cleared",
+            "exported": "Chat history exported",
+            "helpful": "Marked as helpful",
+            "feedback": "Feedback recorded",
+            "error": "AI Error: {{message}}",
+            "default_error": "I encountered an error: {{message}}. Please try again."
+        },
+        "recommendations": {
+            "title": "AI-Powered Recommendations",
+            "generate": "Generate New Insights",
+            "filters": {
+                "category": "All Categories",
+                "priority": "All Priorities",
+                "crop": "Crop Management",
+                "pest": "Pest Control",
+                "weather": "Weather",
+                "fertilizer": "Fertilizer",
+                "irrigation": "Irrigation",
+                "high": "High Priority",
+                "medium": "Medium Priority",
+                "low": "Low Priority"
+            },
+            "confidence": "Confidence",
+            "applied": "Applied",
+            "actionable": "Actionable",
+            "mark_applied": "Mark as Applied",
+            "details": "Details",
+            "no_results": "No recommendations found",
+            "adjust_filters": "Try adjusting your filters",
+            "marked_applied": "Recommendation marked as applied"
+        },
+        "image_analysis": {
+            "title": "AI Image Analysis",
+            "upload_new": "Upload New Image",
+            "confidence": "Confidence",
+            "severity": "Severity",
+            "recommendations": "Recommendations",
+            "download_report": "Download Report",
+            "share": "Share",
+            "analyzed_on": "Analyzed on",
+            "saved": "Analysis saved",
+            "removed": "Removed from saved"
+        },
+        "knowledge": {
+            "title": "Farming Knowledge Base",
+            "search": "Search articles...",
+            "saved": "Saved",
+            "read_time": "min read",
+            "views": "views",
+            "helpful": "helpful",
+            "read_more": "Read More"
+        }
+    }
+}

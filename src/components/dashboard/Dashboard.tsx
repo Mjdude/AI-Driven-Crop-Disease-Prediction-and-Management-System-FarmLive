@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { WeatherWidget } from './WeatherWidget';
 import { FarmOverview } from './FarmOverview';
 import { QuickActions } from './QuickActions';
@@ -9,6 +10,8 @@ import { CropHealth } from './CropHealth';
 import { NotificationsCenter } from './NotificationsCenter';
 
 export const Dashboard: React.FC = () => {
+  const { t } = useTranslation();
+
   return (
     <div className="space-y-6">
       {/* Welcome Section */}
@@ -16,17 +19,17 @@ export const Dashboard: React.FC = () => {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold font-poppins mb-2">
-              Good Morning, Rajesh! 🌱
+              {t('dashboard.welcome_title')}
             </h1>
             <p className="text-farm-green-100 text-lg">
-              Your farm is thriving. Here's what's happening today.
+              {t('dashboard.welcome_subtitle')}
             </p>
           </div>
           <div className="hidden lg:block">
             <div className="bg-white/20 rounded-xl p-6 backdrop-blur-sm">
               <div className="text-right">
                 <p className="text-2xl font-bold">₹2,45,000</p>
-                <p className="text-farm-green-100">Expected Revenue</p>
+                <p className="text-farm-green-100">{t('dashboard.expected_revenue')}</p>
               </div>
             </div>
           </div>

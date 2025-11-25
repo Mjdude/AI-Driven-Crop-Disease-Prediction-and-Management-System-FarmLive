@@ -1,49 +1,52 @@
 
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { TrendingUp, TrendingDown, Minus } from 'lucide-react';
 
 export const MarketPrices: React.FC = () => {
+  const { t } = useTranslation();
+
   const marketData = [
     {
-      commodity: 'Wheat',
+      commodity: t('commodities.wheat'),
       price: '₹2,850',
-      unit: 'per quintal',
+      unit: t('market.per_quintal'),
       change: '+5.2%',
       trend: 'up',
       icon: TrendingUp,
       color: 'text-green-500'
     },
     {
-      commodity: 'Rice',
+      commodity: t('commodities.rice'),
       price: '₹3,200',
-      unit: 'per quintal',
+      unit: t('market.per_quintal'),
       change: '-2.1%',
       trend: 'down',
       icon: TrendingDown,
       color: 'text-red-500'
     },
     {
-      commodity: 'Corn',
+      commodity: t('commodities.corn'),
       price: '₹2,100',
-      unit: 'per quintal',
+      unit: t('market.per_quintal'),
       change: '0.0%',
       trend: 'stable',
       icon: Minus,
       color: 'text-gray-500'
     },
     {
-      commodity: 'Tomatoes',
+      commodity: t('commodities.tomatoes'),
       price: '₹45',
-      unit: 'per kg',
+      unit: t('market.per_kg'),
       change: '+12.8%',
       trend: 'up',
       icon: TrendingUp,
       color: 'text-green-500'
     },
     {
-      commodity: 'Onions',
+      commodity: t('commodities.onions'),
       price: '₹35',
-      unit: 'per kg',
+      unit: t('market.per_kg'),
       change: '+8.5%',
       trend: 'up',
       icon: TrendingUp,
@@ -54,8 +57,8 @@ export const MarketPrices: React.FC = () => {
   return (
     <div className="metric-card">
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-lg font-semibold text-gray-900">Market Prices</h3>
-        <span className="text-xs text-gray-500">Last updated: 2 hours ago</span>
+        <h3 className="text-lg font-semibold text-gray-900">{t('dashboard.market_prices')}</h3>
+        <span className="text-xs text-gray-500">{t('dashboard.last_updated')}</span>
       </div>
 
       <div className="space-y-3">
@@ -74,7 +77,7 @@ export const MarketPrices: React.FC = () => {
                   <div className="text-sm text-gray-500">{item.unit}</div>
                 </div>
               </div>
-              
+
               <div className="text-right">
                 <div className="font-bold text-gray-900">{item.price}</div>
                 <div className={`flex items-center space-x-1 text-sm ${item.color}`}>
@@ -88,9 +91,9 @@ export const MarketPrices: React.FC = () => {
       </div>
 
       <div className="mt-4 p-3 bg-farm-sky-50 border border-farm-sky-200 rounded-lg">
-        <div className="text-sm font-medium text-farm-sky-800">Market Insight</div>
+        <div className="text-sm font-medium text-farm-sky-800">{t('dashboard.market_insight')}</div>
         <div className="text-xs text-farm-sky-700 mt-1">
-          Vegetable prices are trending upward due to favorable weather conditions. Consider increasing tomato and onion production.
+          {t('dashboard.market_insight_text')}
         </div>
       </div>
     </div>
