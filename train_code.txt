@@ -1,0 +1,72 @@
+"""
+OPTIMIZED Plant Disease Detection System - Target: 99% Accuracy
+Key Optimizations:
+1. EfficientNetV2 backbone (better than ResNet50V2)
+2. Advanced data augmentation with Albumentations
+3. Class balancing and stratified sampling
+4. Learning rate scheduling with warmup
+5. Test-Time Augmentation (TTA)
+6. Gradient accumulation for stability
+7. Memory-efficient training
+"""
+
+import os
+import sys
+import json
+import warnings
+from pathlib import Path
+from typing import Dict, List, Tuple
+
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+import cv2
+from PIL import Image
+from tqdm import tqdm
+
+import tensorflow as tf
+from tensorflow import keras
+from tensorflow.keras import layers, models
+from tensorflow.keras.applications import EfficientNetV2B3
+from tensorflow.keras.preprocessing.image import ImageDataGenerator
+from tensorflow.keras.callbacks import *
+
+from sklearn.model_selection import StratifiedKFold, train_test_split
+from sklearn.metrics import *
+from sklearn.utils.class_weight import compute_class_weight
+
+warnings.filterwarnings('ignore')
+
+# Enable mixed precision
+try:
+    from tensorflow.keras import mixed_precision
+    policy = mixed_precision.Policy('mixed_float16')
+    mixed_precision.set_global_policy(policy)
+    print("✅ Mixed precision enabled")
+except:
+    pass
+
+# GPU optimization
+gpus = tf.config.experimental.list_physical_devices('GPU')
+if gpus:
+    for gpu in gpus:
+        tf.config.experimental.set_memory_growth(gpu, True)
+    print(f"✅ Found {len(gpus)} GPU(s)")
+
+
+# ============================================================================
+# OPTIMIZED CONFIGURATION
+# ============================================================================
+
+class OptimizedConfig:
+    """Optimized configuration for 99% accuracy"""
+    
+    # Paths
+    PROJECT_ROOT = Path("plant_disease_detection_optimized")
+    DATASET_PATH = PROJECT_ROOT / "PlantWild_v2"  # Your unzipped dataset
+    MODELS_DIR = PROJECT_ROOT / "models"
+    RESULTS_DIR = PROJECT_ROOT / "results"
+    LOGS_DIR = PROJECT_ROOT / "logs"
+    
+ 
