@@ -23,7 +23,3 @@ dist-ssr
 *.sln
 *.sw?
 
-# Model files (too large for git)
-*.h5
-best_phase2.weights.h5
-public/models/*.h5
